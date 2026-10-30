@@ -1,22 +1,5 @@
-//--------------------------------Exercice3.1----------------------------------------------------------
 <?php
-require 'config.php';
-// Fonction mention pour réutiliser les règles de la partie 2
-function mention($note)
-{
-    if ($note >= 16) {
-        return "Très bien";
-    } elseif ($note >= 14) {
-        return "Bien";
-    } elseif ($note >= 12) {
-        return "Assez bien";
-    } elseif ($note >= SEUIL) {
-        return "Passable";
-    } else {
-        return "Ajourné";
-    }
-}
-// Tableau associatif des notes
+
 $notes = [
     "Mohamed" => 16,
     "Ahmed" => 14,
@@ -30,72 +13,101 @@ $notes = [
     "Sami" => 7,
     "Noura" => 14
 ];
-// Tableau indexé des modules
-$modules = ["PHP", "HTML", "CSS"];
-echo "<h2>Affichage avec foreach</h2>";
+
+?>
+<?php
+
+$modules = ["PHP", "UML", "Linux"];
+// Affichage avec foreach
 foreach ($modules as $module) {
     echo $module . "<br>";
 }
-echo "<h2>Affichage par indice</h2>";
+// Accès par indice
 echo $modules[0] . "<br>";
 echo $modules[1] . "<br>";
-echo $modules[2] . "<br>";
+echo $modules[2];
+
 ?>
-//---------------------------------------Exercice3.2-----------------------------------------------------------
 <?php
-echo "<h2>Liste des apprenants</h2>";
+
+require "config.php";
+function mention($note) {
+    if ($note >= 16) {
+        return "Très bien";
+    } elseif ($note >= 14) {
+        return "Bien";
+    } elseif ($note >= 12) {
+        return "Assez bien";
+    } elseif ($note >= SEUIL) {
+        return "Passable";
+    } else {
+        return "Ajourné";
+    }
+}
+$notes = [
+    "Mohamed" => 16,
+    "Ahmed" => 14,
+    "Hind" => 13,
+    "Aicha" => 15,
+    "Samir" => 13,
+    "Zakaria" => 13,
+    "Rafik" => 10,
+    "Ilham" => 9,
+    "Hamza" => 7,
+    "Sami" => 7,
+    "Noura" => 14
+];
 echo "<table border='1' cellpadding='8'>";
-echo "<tr>";
-echo "<th>Nom</th>";
-echo "<th>Note</th>";
-echo "<th>Mention</th>";
-echo "</tr>";
+echo "<tr>
+        <th>Nom</th>
+        <th>Note</th>
+        <th>Mention</th>
+      </tr>";
 foreach ($notes as $nom => $note) {
-    // Les notes inférieures au seuil sont en rouge
-    $style = ($note < SEUIL) ? "color:red;" : "";
-    echo "<tr style='$style'>";
-    echo "<td>" . htmlspecialchars($nom) . "</td>";
-    echo "<td>" . $note . "</td>";
+    $couleur = ($note < SEUIL) ? "red" : "black";
+    echo "<tr style='color:$couleur'>";
+    echo "<td>$nom</td>";
+    echo "<td>$note</td>";
     echo "<td>" . mention($note) . "</td>";
     echo "</tr>";
 }
 echo "</table>";
+
 ?>
-//-------------------------------------Exercice3.4-------------------------------------------------------
 <?php
+
 $somme = 0;
+$meilleure = 0;
+$faible = 20;
 $nombre = 0;
-$meilleure = null;
-$faible = null;
 foreach ($notes as $nom => $note) {
     $somme += $note;
     $nombre++;
-
-    if ($meilleure === null || $note > $meilleure) {
+    if ($note > $meilleure) {
         $meilleure = $note;
     }
-
-    if ($faible === null || $note < $faible) {
+    if ($note < $faible) {
         $faible = $note;
     }
 }
 $moyenne = $somme / $nombre;
-echo "<h2>Statistiques calculées avec une boucle</h2>";
 echo "Somme : " . $somme . "<br>";
-echo "Nombre d'apprenants : " . $nombre . "<br>";
-echo "Moyenne : " . round($moyenne, 2) . "<br>";
+echo "Moyenne : " . $moyenne . "<br>";
 echo "Meilleure note : " . $meilleure . "<br>";
 echo "Plus faible note : " . $faible . "<br>";
+
 ?>
 <?php
-echo "<h2>Vérification avec les fonctions PHP</h2>";
+
 echo "Somme : " . array_sum($notes) . "<br>";
 echo "Nombre : " . count($notes) . "<br>";
-echo "Moyenne : " . round(array_sum($notes) / count($notes), 2) . "<br>";
-echo "Maximum : " . max($notes) . "<br>";
-echo "Minimum : " . min($notes) . "<br>";
+echo "Meilleure note : " . max($notes) . "<br>";
+echo "Plus faible note : " . min($notes) . "<br>";
+echo "Moyenne : " . array_sum($notes) / count($notes);
+
 ?>
 <?php
+
 $effectifs = [];
 foreach ($notes as $nom => $note) {
     $m = mention($note);
@@ -105,54 +117,50 @@ foreach ($notes as $nom => $note) {
         $effectifs[$m] = 1;
     }
 }
-echo "<h2>Effectifs par mention</h2>";
-foreach ($effectifs as $m => $effectif) {
-    echo $m . " : " . $effectif . "<br>";
+foreach ($effectifs as $mention => $nombre) {
+    echo $mention . " : " . $nombre . "<br>";
 }
+
 ?>
-//------------------------------Exercice3.4----------------------------------------------------------- 
 <?php
-function afficher($tab)
-{
-    echo "<table border='1' cellpadding='8'>";
-    echo "<tr><th>Nom</th><th>Note</th></tr>";
-    foreach ($tab as $nom => $note) {
-        echo "<tr>";
-        echo "<td>" . htmlspecialchars((string)$nom) . "</td>";
-        echo "<td>" . $note . "</td>";
-        echo "</tr>";
-    }
-    echo "</table><br>";
+
+function afficher($tab) {
+    echo "<pre>";
+    print_r($tab);
+    echo "</pre>";
 }
-// 1. Tri par noms croissants
-echo "<h3>1. Tri par noms croissants (ksort)</h3>";
-$tab = $notes;
-ksort($tab);
-afficher($tab);
-// 2. Tri par notes décroissantes
-echo "<h3>2. Tri par notes décroissantes (arsort)</h3>";
-$tab = $notes;
-arsort($tab);
-afficher($tab);
-// 3. Tri par noms décroissants
-echo "<h3>3. Tri par noms décroissants (krsort)</h3>";
-$tab = $notes;
-krsort($tab);
-afficher($tab);
-// 4. Tri par notes croissantes
-echo "<h3>4. Tri par notes croissantes (asort)</h3>";
-$tab = $notes;
-asort($tab);
-afficher($tab);
+
 ?>
-//-----------------------------------Exercice3.5------------------------------------------------------------ 
 <?php
+
+ksort($notes);
+afficher($notes);
+
+?>
+<?php
+
+arsort($notes);
+afficher($notes);
+
+?>
+<?php
+
+krsort($notes);
+afficher($notes);
+
+?>
+<?php
+
+asort($notes);
+afficher($notes);
+
+?>
+<?php
+
 $a = ["x" => 1, "y" => 2];
 $b = ["y" => 2, "x" => 1];
-echo "<h3>Résultat de \$a + \$b</h3>";
 var_dump($a + $b);
-echo "<h3>Résultat de \$a == \$b</h3>";
 var_dump($a == $b);
-echo "<h3>Résultat de \$a === \$b</h3>";
 var_dump($a === $b);
+
 ?>

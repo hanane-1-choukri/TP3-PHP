@@ -40,7 +40,7 @@ echo "Valeur de A : " . $A . "<br>";
 ?>
 <?php
 
-require 'config.php';
+//require 'config.php';
 
 // Affichage des constantes
 echo "Établissement : " . ETABLISSEMENT . "<br>";
@@ -68,7 +68,7 @@ echo "<br>";
 // être réaffectées normalement.
 
 ?>
-//--------------------------------Exercice 1.4---------------------------------------------------
+/*--------------------------------Exercice 1.4---------------------------------------------------*/
 <?php
 $prix_ht = 60;
 $tva = 20;
@@ -105,7 +105,7 @@ echo "Hexadécimal : " . $hexadecimal . "<br>";
 echo "Octal : " . $octal . "<br>";
 echo "Binaire : " . $binaire . "<br>";
 ?>
-//------------------------------------Exercice 1.5---------------------------------------------------
+/*------------------------------------Exercice 1.5---------------------------------------------------*/
 <?php
 
 $traitees = "égales à";
